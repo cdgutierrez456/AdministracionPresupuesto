@@ -101,6 +101,27 @@ class UI {
     actualizarRestante(restante) {
         document.querySelector('#restante').textContent = restante;
     }
+
+    comprobarPresupuesto(presupuestObj) {
+        const {presupuesto, restante} = presupuestObj;
+        const restanteDiv = document.querySelector('.restante');
+
+        // Comprobar gasto del 75%
+        if((presupuesto / 4) > restante) {
+            restanteDiv.classList.remove('alert-success', 'alert-warning');
+            restanteDiv.classList.add('alert-danger');
+        } else if ((presupuesto / 2) > restante) {
+            restanteDiv.classList.remove('alert-success');
+            restanteDiv.classList.add('alert-warning');
+        }
+
+        // Si el restante es 0 o menor
+        if(restante <= 0) {
+            ui.imprimirAlerta('El presupuesto se ha agotado', 'error');
+
+            formulario.querySelector('button[type="submit"]').disabled = true;
+        }
+    }
 }
 
 // Instanciando UI
@@ -151,6 +172,8 @@ function agregarGasto(e) {
     ui.agregarGastoListado(gastos);
 
     ui.actualizarRestante(restante);
+
+    ui.comprobarPresupuesto(presupuesto);
 
     // Reiniciando el formulario
     formulario.reset();
